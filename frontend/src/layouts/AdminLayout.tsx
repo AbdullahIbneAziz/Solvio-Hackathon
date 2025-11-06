@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { LayoutDashboard, Building2, Users, Package, FileText, LogOut } from 'lucide-react'
+import { LayoutDashboard, Building2, Users, Package, FileText, LogOut, Bot } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const navItems = [
@@ -9,6 +9,7 @@ const navItems = [
   { path: '/admin/staff', label: 'Staff', icon: Users },
   { path: '/admin/products', label: 'Products', icon: Package },
   { path: '/admin/reports', label: 'Reports', icon: FileText },
+  { path: '/admin/ai-assistant', label: 'AI Assistant', icon: Bot },
 ]
 
 export default function AdminLayout() {

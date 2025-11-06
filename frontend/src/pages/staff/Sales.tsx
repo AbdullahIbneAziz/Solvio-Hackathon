@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react'
-import api from '@/services/api'
+import { getSales, createSale, getProducts, getCustomers } from '@/services/mock'
 import toast from 'react-hot-toast'
 import { Sale, Product, Customer } from '@/types'
 
@@ -20,8 +20,8 @@ export default function StaffSales() {
 
   const fetchSales = async () => {
     try {
-      const response = await api.get('/staff/sales')
-      setSales(response.data)
+      const data = await getSales()
+      setSales(data)
     } catch (error) {
       toast.error('Failed to fetch sales')
     } finally {
@@ -31,8 +31,8 @@ export default function StaffSales() {
 
   const fetchProducts = async () => {
     try {
-      const response = await api.get('/admin/products')
-      setProducts(response.data)
+      const data = await getProducts()
+      setProducts(data)
     } catch (error) {
       console.error('Failed to fetch products')
     }
@@ -40,8 +40,8 @@ export default function StaffSales() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await api.get('/staff/customers')
-      setCustomers(response.data)
+      const data = await getCustomers()
+      setCustomers(data)
     } catch (error) {
       console.error('Failed to fetch customers')
     }
@@ -50,9 +50,9 @@ export default function StaffSales() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await api.post('/staff/sales', {
+      await createSale({
         product_id: parseInt(formData.product_id),
-        customer_id: formData.customer_id ? parseInt(formData.customer_id) : null,
+        customer_id: formData.customer_id ? parseInt(formData.customer_id) : undefined,
         quantity: parseFloat(formData.quantity)
       })
       toast.success('Sale recorded successfully')
@@ -98,7 +98,7 @@ export default function StaffSales() {
                 <td className="px-6 py-4 whitespace-nowrap">{sale.sale_date}</td>
                 <td className="px-6 py-4">Product #{sale.product_id}</td>
                 <td className="px-6 py-4">{sale.quantity}</td>
-                <td className="px-6 py-4 font-medium">${sale.total_price.toFixed(2)}</td>
+                <td className="px-6 py-4 font-medium">৳{sale.total_price.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -121,7 +121,7 @@ export default function StaffSales() {
                   <option value="">Select Product</option>
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
-                      {product.name} - ${product.unit_price}
+                      {product.name} - ৳{product.unit_price}
                     </option>
                   ))}
                 </select>

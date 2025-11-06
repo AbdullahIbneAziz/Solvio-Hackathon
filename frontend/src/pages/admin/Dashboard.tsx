@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import { TrendingUp, DollarSign, Package, Users, AlertTriangle } from 'lucide-react'
-import api from '../../services/api'
+import { getAdminDashboard } from '../../services/mock'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function AdminDashboard() {
@@ -16,8 +16,8 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await api.get('/admin/dashboard')
-      setDashboardData(response.data)
+      const data = await getAdminDashboard()
+      setDashboardData(data)
     } catch (error) {
       console.error('Failed to fetch dashboard data', error)
     } finally {
@@ -27,8 +27,8 @@ export default function AdminDashboard() {
 
   const fetchAIInsights = async () => {
     try {
-      const response = await api.get('/admin/ai/insights')
-      setAiInsights(response.data)
+      const data = await getAdminDashboard()
+      setAiInsights({ shortage_warnings: { current_low_stock: [], predicted_shortages: [] }, ...data })
     } catch (error) {
       console.error('Failed to fetch AI insights', error)
     }
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${summary.total_sales?.toFixed(2) || '0.00'}</div>
+            <div className="text-2xl font-bold">৳{summary.total_sales?.toFixed(2) || '0.00'}</div>
             <p className="text-xs text-gray-500 mt-1">{summary.sales_count || 0} transactions</p>
           </CardContent>
         </Card>
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="revenue" stroke="#3b82f6" name="Revenue ($)" />
+                <Line type="monotone" dataKey="revenue" stroke="#3b82f6" name="Revenue (৳)" />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -129,7 +129,7 @@ export default function AdminDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="total_revenue" fill="#10b981" name="Revenue ($)" />
+                <Bar dataKey="total_revenue" fill="#10b981" name="Revenue (৳)" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

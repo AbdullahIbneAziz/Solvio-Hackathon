@@ -9,7 +9,9 @@ import AdminBranches from './pages/admin/Branches'
 import AdminStaff from './pages/admin/Staff'
 import AdminProducts from './pages/admin/Products'
 import AdminReports from './pages/admin/Reports'
+import AdminAIAssistant from './pages/admin/AIAssistant'
 import StaffDashboard from './pages/staff/Dashboard'
+import StaffAIAssistant from './pages/staff/AIAssistant'
 import StaffSales from './pages/staff/Sales'
 import StaffInventory from './pages/staff/Inventory'
 import StaffCustomers from './pages/staff/Customers'
@@ -37,6 +39,7 @@ function App() {
             <Route path="staff" element={<AdminStaff />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="reports" element={<AdminReports />} />
+            <Route path="ai-assistant" element={<AdminAIAssistant />} />
           </Route>
           <Route
             path="/staff/*"
@@ -52,6 +55,7 @@ function App() {
             <Route path="inventory" element={<StaffInventory />} />
             <Route path="customers" element={<StaffCustomers />} />
             <Route path="reports" element={<StaffReports />} />
+            <Route path="ai-assistant" element={<StaffAIAssistant />} />
           </Route>
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>

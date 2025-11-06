@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { User } from '../types'
-import api from '../services/api'
+import { mockLogin } from '../services/mock'
 
 interface AuthContextType {
   user: User | null
@@ -22,14 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    const response = await api.post('/auth/login', { email, password })
-    const { access_token, refresh_token, user: userData } = response.data
-    
+    const { user, access_token, refresh_token } = await mockLogin(email, password)
     localStorage.setItem('access_token', access_token)
     localStorage.setItem('refresh_token', refresh_token)
-    localStorage.setItem('user', JSON.stringify(userData))
-    
-    setUser(userData)
+    localStorage.setItem('user', JSON.stringify(user))
+    setUser(user)
   }
 
   const logout = () => {

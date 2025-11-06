@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import { DollarSign, Package, Users, AlertTriangle } from 'lucide-react'
-import api from '../../services/api'
+import { getStaffDashboard } from '../../services/mock'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function StaffDashboard() {
@@ -14,8 +14,8 @@ export default function StaffDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await api.get('/staff/dashboard')
-      setDashboardData(response.data)
+      const data = await getStaffDashboard()
+      setDashboardData(data)
     } catch (error) {
       console.error('Failed to fetch dashboard data', error)
     } finally {
@@ -45,7 +45,7 @@ export default function StaffDashboard() {
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${summary.total_sales?.toFixed(2) || '0.00'}</div>
+            <div className="text-2xl font-bold">৳{summary.total_sales?.toFixed(2) || '0.00'}</div>
             <p className="text-xs text-gray-500 mt-1">{summary.sales_count || 0} transactions</p>
           </CardContent>
         </Card>
@@ -97,7 +97,7 @@ export default function StaffDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="revenue" stroke="#3b82f6" name="Revenue ($)" />
+                <Line type="monotone" dataKey="revenue" stroke="#3b82f6" name="Revenue (৳)" />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -115,7 +115,7 @@ export default function StaffDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="total_revenue" fill="#10b981" name="Revenue ($)" />
+                <Bar dataKey="total_revenue" fill="#10b981" name="Revenue (৳)" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

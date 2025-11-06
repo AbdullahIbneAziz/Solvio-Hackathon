@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Download } from 'lucide-react'
-import api from '@/services/api'
+// Using mock data, just show toasts and pretend download
 import toast from 'react-hot-toast'
 
 export default function AdminReports() {
@@ -16,23 +16,7 @@ export default function AdminReports() {
       if (endDate) params.append('end_date', endDate)
       params.append('format', format)
 
-      const response = await api.get(`/admin/reports/${reportType}?${params}`, {
-        responseType: format === 'csv' ? 'blob' : 'json'
-      })
-
-      if (format === 'csv') {
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', `${reportType}_report.csv`)
-        document.body.appendChild(link)
-        link.click()
-        link.remove()
-        toast.success('Report downloaded successfully')
-      } else {
-        console.log(response.data)
-        toast.success('Report data loaded')
-      }
+      toast.success(format === 'csv' ? 'Report downloaded (mock)' : 'Report data loaded (mock)')
     } catch (error) {
       toast.error('Failed to generate report')
     }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, Edit } from 'lucide-react'
-import api from '@/services/api'
+import { getInventory, createInventory, updateInventory, getProducts } from '@/services/mock'
 import toast from 'react-hot-toast'
 import { Inventory, Product } from '@/types'
 
@@ -19,8 +19,8 @@ export default function StaffInventory() {
 
   const fetchInventory = async () => {
     try {
-      const response = await api.get('/staff/inventory')
-      setInventory(response.data)
+      const data = await getInventory()
+      setInventory(data)
     } catch (error) {
       toast.error('Failed to fetch inventory')
     } finally {
@@ -30,8 +30,8 @@ export default function StaffInventory() {
 
   const fetchProducts = async () => {
     try {
-      const response = await api.get('/admin/products')
-      setProducts(response.data)
+      const data = await getProducts()
+      setProducts(data)
     } catch (error) {
       console.error('Failed to fetch products')
     }
@@ -41,13 +41,14 @@ export default function StaffInventory() {
     e.preventDefault()
     try {
       if (editingItem) {
-        await api.put(`/staff/inventory/${editingItem.id}`, {
+        await updateInventory(editingItem.id, {
           quantity: parseFloat(formData.quantity),
           min_threshold: parseFloat(formData.min_threshold)
         })
         toast.success('Inventory updated successfully')
       } else {
-        await api.post('/staff/inventory', {
+        await createInventory({
+          branch_id: 1,
           product_id: parseInt(formData.product_id),
           quantity: parseFloat(formData.quantity),
           min_threshold: parseFloat(formData.min_threshold)

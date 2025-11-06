@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, Edit, Trash2 } from 'lucide-react'
-import api from '@/services/api'
+import { getProducts, createProduct, updateProduct, deleteProduct } from '@/services/mock'
 import toast from 'react-hot-toast'
 import { Product } from '@/types'
 
@@ -17,8 +17,8 @@ export default function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const response = await api.get('/admin/products')
-      setProducts(response.data)
+      const data = await getProducts()
+      setProducts(data)
     } catch (error) {
       toast.error('Failed to fetch products')
     } finally {
@@ -37,10 +37,10 @@ export default function AdminProducts() {
       }
       
       if (editingProduct) {
-        await api.put(`/admin/products/${editingProduct.id}`, payload)
+        await updateProduct(editingProduct.id, payload)
         toast.success('Product updated successfully')
       } else {
-        await api.post('/admin/products', payload)
+        await createProduct(payload)
         toast.success('Product created successfully')
       }
       setShowModal(false)
@@ -66,7 +66,7 @@ export default function AdminProducts() {
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this product?')) return
     try {
-      await api.delete(`/admin/products/${id}`)
+      await deleteProduct(id)
       toast.success('Product deleted successfully')
       fetchProducts()
     } catch (error: any) {
@@ -111,7 +111,7 @@ export default function AdminProducts() {
               <tr key={product.id}>
                 <td className="px-6 py-4 whitespace-nowrap font-medium">{product.name}</td>
                 <td className="px-6 py-4">{product.category || '-'}</td>
-                <td className="px-6 py-4">${product.unit_price.toFixed(2)}</td>
+                <td className="px-6 py-4">৳{product.unit_price.toFixed(2)}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex gap-2">
                     <button

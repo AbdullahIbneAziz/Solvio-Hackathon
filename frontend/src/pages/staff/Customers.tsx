@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, Edit, Trash2 } from 'lucide-react'
-import api from '@/services/api'
+import { getCustomers, createCustomer, updateCustomer, deleteCustomer } from '@/services/mock'
 import toast from 'react-hot-toast'
 import { Customer } from '@/types'
 
@@ -17,8 +17,8 @@ export default function StaffCustomers() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await api.get('/staff/customers')
-      setCustomers(response.data)
+      const data = await getCustomers()
+      setCustomers(data)
     } catch (error) {
       toast.error('Failed to fetch customers')
     } finally {
@@ -30,10 +30,10 @@ export default function StaffCustomers() {
     e.preventDefault()
     try {
       if (editingCustomer) {
-        await api.put(`/staff/customers/${editingCustomer.id}`, formData)
+        await updateCustomer(editingCustomer.id, formData)
         toast.success('Customer updated successfully')
       } else {
-        await api.post('/staff/customers', formData)
+        await createCustomer({ ...formData, branch_id: 1 })
         toast.success('Customer created successfully')
       }
       setShowModal(false)
@@ -54,7 +54,7 @@ export default function StaffCustomers() {
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this customer?')) return
     try {
-      await api.delete(`/staff/customers/${id}`)
+      await deleteCustomer(id)
       toast.success('Customer deleted successfully')
       fetchCustomers()
     } catch (error: any) {

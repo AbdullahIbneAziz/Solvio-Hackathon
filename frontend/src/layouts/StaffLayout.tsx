@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { LayoutDashboard, ShoppingCart, Package, Users, FileText, LogOut } from 'lucide-react'
+import { LayoutDashboard, ShoppingCart, Package, Users, FileText, LogOut, Bot } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const navItems = [
@@ -9,6 +9,7 @@ const navItems = [
   { path: '/staff/inventory', label: 'Inventory', icon: Package },
   { path: '/staff/customers', label: 'Customers', icon: Users },
   { path: '/staff/reports', label: 'Reports', icon: FileText },
+  { path: '/staff/ai-assistant', label: 'AI Assistant', icon: Bot },
 ]
 
 export default function StaffLayout() {

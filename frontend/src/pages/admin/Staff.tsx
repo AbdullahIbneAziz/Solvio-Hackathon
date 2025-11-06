@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, Edit, Trash2 } from 'lucide-react'
-import api from '@/services/api'
+import { getStaff, createStaff, updateStaff, deleteStaff, getBranches } from '@/services/mock'
 import toast from 'react-hot-toast'
 import { User } from '@/types'
 import { Branch } from '@/types'
@@ -20,8 +20,8 @@ export default function AdminStaff() {
 
   const fetchStaff = async () => {
     try {
-      const response = await api.get('/admin/staff')
-      setStaff(response.data)
+      const data = await getStaff()
+      setStaff(data)
     } catch (error) {
       toast.error('Failed to fetch staff')
     } finally {
@@ -31,8 +31,8 @@ export default function AdminStaff() {
 
   const fetchBranches = async () => {
     try {
-      const response = await api.get('/admin/branches')
-      setBranches(response.data)
+      const data = await getBranches()
+      setBranches(data)
     } catch (error) {
       console.error('Failed to fetch branches')
     }
@@ -49,10 +49,10 @@ export default function AdminStaff() {
       }
       
       if (editingStaff) {
-        await api.put(`/admin/staff/${editingStaff.id}`, payload)
+        await updateStaff(editingStaff.id, payload)
         toast.success('Staff updated successfully')
       } else {
-        await api.post('/admin/staff', payload)
+        await createStaff(payload)
         toast.success('Staff created successfully')
       }
       setShowModal(false)
@@ -73,7 +73,7 @@ export default function AdminStaff() {
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this staff member?')) return
     try {
-      await api.delete(`/admin/staff/${id}`)
+      await deleteStaff(id)
       toast.success('Staff deleted successfully')
       fetchStaff()
     } catch (error: any) {

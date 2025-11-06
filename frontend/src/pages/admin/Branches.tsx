@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, Edit, Trash2 } from 'lucide-react'
-import api from '@/services/api'
+import { getBranches, createBranch, updateBranch, deleteBranch } from '@/services/mock'
 import toast from 'react-hot-toast'
 import { Branch } from '@/types'
 
@@ -17,8 +17,8 @@ export default function AdminBranches() {
 
   const fetchBranches = async () => {
     try {
-      const response = await api.get('/admin/branches')
-      setBranches(response.data)
+      const data = await getBranches()
+      setBranches(data)
     } catch (error) {
       toast.error('Failed to fetch branches')
     } finally {
@@ -30,10 +30,10 @@ export default function AdminBranches() {
     e.preventDefault()
     try {
       if (editingBranch) {
-        await api.put(`/admin/branches/${editingBranch.id}`, formData)
+        await updateBranch(editingBranch.id, formData)
         toast.success('Branch updated successfully')
       } else {
-        await api.post('/admin/branches', formData)
+        await createBranch(formData)
         toast.success('Branch created successfully')
       }
       setShowModal(false)
@@ -54,7 +54,7 @@ export default function AdminBranches() {
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this branch?')) return
     try {
-      await api.delete(`/admin/branches/${id}`)
+      await deleteBranch(id)
       toast.success('Branch deleted successfully')
       fetchBranches()
     } catch (error: any) {
